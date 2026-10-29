@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%">
+  <defs>
+    <!-- Grid pattern -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.2" />
+    </pattern>
+    <!-- Subtle center vignette glow -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#141414" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="680" fill="#080808" />
+  <rect width="1200" height="680" fill="url(#vignette)" />
+  <rect width="1200" height="680" fill="url(#grid)" />
+
+  <!-- Logo Group Centered -->
+  <g transform="translate(180, 220)">
+    <!-- Circle N Logo -->
+    <g transform="scale(9.5)">
+      <path
+        d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z"
+        fill="#ededed"
+      />
+    </g>
+
+    <!-- Wordmark NEXT.js -->
+    <g transform="translate(265, 155)">
+      <text
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="140"
+        font-weight="800"
+        letter-spacing="-0.04em"
+        fill="#ffffff"
+      >NEXT<tspan font-size="82" font-weight="700" letter-spacing="-0.02em" dx="6" dy="-10">.JS</tspan></text>
+    </g>
+  </g>
+</svg>
