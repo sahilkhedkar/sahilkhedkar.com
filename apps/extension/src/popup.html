@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Playing Sync</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="#FF0000" />
+          <circle cx="12" cy="12" r="7" stroke="#FFFFFF" stroke-width="1.2" fill="none" />
+          <polygon points="10,8.5 16,12 10,15.5" fill="#FFFFFF" />
+        </svg>
+        <div class="brand-text">
+          <h1>Now Playing</h1>
+          <span class="subtitle">sahilkhedkar.com</span>
+        </div>
+      </div>
+      <label class="switch" title="Toggle automatic sync">
+        <input type="checkbox" id="sync-toggle" checked>
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <!-- Status Banner -->
+    <div id="status-card" class="status-card idle">
+      <div class="status-indicator">
+        <span id="status-dot" class="status-dot"></span>
+        <span id="status-text" class="status-text">Checking status...</span>
+      </div>
+      <span id="last-sync-time" class="last-sync-time"></span>
+    </div>
+
+    <!-- Active Track Preview -->
+    <div id="track-preview" class="track-preview hidden">
+      <img id="preview-art" class="preview-art" src="" alt="Artwork">
+      <div class="preview-info">
+        <div id="preview-title" class="preview-title">Song Title</div>
+        <div id="preview-artist" class="preview-artist">Artist</div>
+      </div>
+      <div id="preview-badge" class="preview-badge">LIVE</div>
+    </div>
+
+    <!-- Configuration Form -->
+    <form id="config-form" class="config-form">
+      <div class="form-group">
+        <div class="label-row">
+          <label for="api-url">API Endpoint URL</label>
+          <div class="preset-group">
+            <button type="button" class="preset-chip" id="preset-prod">Production</button>
+            <button type="button" class="preset-chip" id="preset-local">Local</button>
+          </div>
+        </div>
+        <input
+          type="url"
+          id="api-url"
+          placeholder="https://sahilkhedkar.com/api/now-playing"
+          required
+        />
+        <span class="field-hint">You can edit this field or click a preset above</span>
+      </div>
+
+      <div class="form-group">
+        <label for="token">Secret Update Token</label>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="token"
+            placeholder="Matches NOW_PLAYING_UPDATE_TOKEN"
+            required
+          />
+          <button type="button" id="toggle-token" class="icon-button" title="Show/Hide">
+            👁️
+          </button>
+        </div>
+        <span class="field-hint">Configured in your website's .env file</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button type="button" id="test-btn" class="btn btn-secondary">
+          Test Connection
+        </button>
+        <button type="submit" id="save-btn" class="btn btn-primary">
+          Save Settings
+        </button>
+      </div>
+    </form>
+
+    <!-- Message / Alert box -->
+    <div id="alert-box" class="alert-box hidden"></div>
+
+    <!-- Footer Links -->
+    <footer class="popup-footer">
+      <a href="https://music.youtube.com" target="_blank" rel="noopener noreferrer">
+        Open YouTube Music ↗
+      </a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
