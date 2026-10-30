@@ -34,7 +34,7 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
     let isSubscribed = true;
 
     // Fetch initial state
-    fetch("/api/now-playing")
+    fetch(`/api/now-playing?ts=${Date.now()}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((json) => {
         if (json?.data && isSubscribed) {
@@ -77,10 +77,10 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
 
     connectSSE();
 
-    // Regular polling fallback to ensure real-time accuracy
+    // Polling is the reliable transport across separate Vercel function instances.
     pollInterval = setInterval(() => {
       if (!isSubscribed) return;
-      fetch("/api/now-playing")
+      fetch(`/api/now-playing?ts=${Date.now()}`, { cache: "no-store" })
         .then((res) => (res.ok ? res.json() : null))
         .then((json) => {
           if (json?.data && isSubscribed) {
@@ -90,7 +90,7 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
           }
         })
         .catch(() => {});
-    }, 8000);
+    }, 2000);
 
     return () => {
       isSubscribed = false;
