@@ -330,8 +330,8 @@ async function checkAndUpdate(force: boolean = false) {
   }
 
   const now = Date.now();
-  // Keep the production state fresh even when the track metadata is unchanged.
-  const isHeartbeatTime = current.isPlaying && (now - lastSentTimestamp > 3000);
+  // Send heartbeat every 8 seconds while playing
+  const isHeartbeatTime = current.isPlaying && (now - lastSentTimestamp > 8000);
 
   const hasChanged =
     force ||

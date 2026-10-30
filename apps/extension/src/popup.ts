@@ -205,6 +205,7 @@ testBtn.addEventListener("click", async () => {
       },
       body: JSON.stringify({
         action: "heartbeat",
+        isPlaying: false,
       }),
     });
 
