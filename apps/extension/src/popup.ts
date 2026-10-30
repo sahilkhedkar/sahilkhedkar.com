@@ -16,28 +16,42 @@ const statusCard = document.getElementById("status-card") as HTMLDivElement;
 const statusText = document.getElementById("status-text") as HTMLSpanElement;
 const lastSyncTime = document.getElementById("last-sync-time") as HTMLSpanElement;
 
+const presetBoth = document.getElementById("preset-both") as HTMLButtonElement | null;
 const presetProd = document.getElementById("preset-prod") as HTMLButtonElement | null;
 const presetLocal = document.getElementById("preset-local") as HTMLButtonElement | null;
+const dualSyncCheckbox = document.getElementById("dual-sync") as HTMLInputElement | null;
 
 const PROD_URL = "https://sahilkhedkar.com/api/now-playing";
 const LOCAL_URL = "http://localhost:1234/api/now-playing";
 
 function updatePresetHighlight() {
+  const isDual = dualSyncCheckbox ? dualSyncCheckbox.checked : true;
   const currentVal = apiUrlInput.value.trim();
-  if (presetProd) presetProd.classList.toggle("active", currentVal === PROD_URL);
-  if (presetLocal) presetLocal.classList.toggle("active", currentVal === LOCAL_URL);
+
+  if (presetBoth) presetBoth.classList.toggle("active", isDual);
+  if (presetProd) presetProd.classList.toggle("active", !isDual && currentVal === PROD_URL);
+  if (presetLocal) presetLocal.classList.toggle("active", !isDual && currentVal === LOCAL_URL);
 }
 
+presetBoth?.addEventListener("click", () => {
+  if (dualSyncCheckbox) dualSyncCheckbox.checked = true;
+  apiUrlInput.value = PROD_URL;
+  updatePresetHighlight();
+});
+
 presetProd?.addEventListener("click", () => {
+  if (dualSyncCheckbox) dualSyncCheckbox.checked = false;
   apiUrlInput.value = PROD_URL;
   updatePresetHighlight();
 });
 
 presetLocal?.addEventListener("click", () => {
+  if (dualSyncCheckbox) dualSyncCheckbox.checked = false;
   apiUrlInput.value = LOCAL_URL;
   updatePresetHighlight();
 });
 
+dualSyncCheckbox?.addEventListener("change", updatePresetHighlight);
 apiUrlInput.addEventListener("input", updatePresetHighlight);
 
 const trackPreview = document.getElementById("track-preview") as HTMLDivElement;
@@ -126,6 +140,9 @@ async function loadSettings() {
     apiUrlInput.value = cfg.apiUrl || DEFAULT_CONFIG.apiUrl;
     tokenInput.value = cfg.token || DEFAULT_CONFIG.token;
     syncToggle.checked = cfg.enabled !== false;
+    if (dualSyncCheckbox) {
+      dualSyncCheckbox.checked = cfg.dualSync !== false;
+    }
 
     updateStatusUI(cfg);
     updateTrackPreview(cfg.lastTrack);
@@ -161,6 +178,7 @@ configForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const apiUrl = apiUrlInput.value.trim() || DEFAULT_CONFIG.apiUrl;
   const token = tokenInput.value.trim() || DEFAULT_CONFIG.token;
+  const dualSync = dualSyncCheckbox ? dualSyncCheckbox.checked : true;
 
   if (!apiUrl) {
     showAlert("Please enter an API URL.", "error");
@@ -171,25 +189,35 @@ configForm.addEventListener("submit", (e) => {
     const updated: ExtensionConfig = {
       ...(items as ExtensionConfig),
       apiUrl,
+      prodUrl: PROD_URL,
+      localUrl: LOCAL_URL,
+      dualSync,
       token,
       lastError: null,
     };
 
     chrome.storage.sync.set(updated, () => {
       chrome.runtime.sendMessage({ type: "CONFIG_UPDATED", payload: updated });
-      showAlert("Settings saved successfully!", "success");
+      showAlert(
+        dualSync
+          ? "Settings saved! Dual Sync enabled for Prod + Local."
+          : "Settings saved successfully!",
+        "success"
+      );
       updateStatusUI(updated);
+      updatePresetHighlight();
     });
   });
 });
 
 // Test connection
 testBtn.addEventListener("click", async () => {
-  const apiUrl = apiUrlInput.value.trim();
   const token = tokenInput.value.trim();
+  const isDual = dualSyncCheckbox ? dualSyncCheckbox.checked : true;
+  const apiUrl = apiUrlInput.value.trim() || PROD_URL;
 
-  if (!apiUrl || !token) {
-    showAlert("Enter API URL and token first.", "error");
+  if (!token) {
+    showAlert("Enter token first.", "error");
     return;
   }
 
@@ -197,33 +225,55 @@ testBtn.addEventListener("click", async () => {
   testBtn.textContent = "Testing...";
 
   try {
-    const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        action: "heartbeat",
-        isPlaying: false,
-      }),
-    });
+    const targets = isDual ? [PROD_URL, LOCAL_URL] : [apiUrl];
+    const checks = await Promise.all(
+      targets.map(async (url) => {
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              action: "heartbeat",
+              isPlaying: false,
+            }),
+          });
+          return { url, ok: res.ok, status: res.status };
+        } catch (err) {
+          return { url, ok: false, error: err instanceof Error ? err.message : "Offline" };
+        }
+      })
+    );
 
-    if (res.ok) {
-      showAlert("Connection successful! Server verified token.", "success");
-      chrome.storage.sync.get(DEFAULT_CONFIG, (items) => {
-        const updated = {
-          ...(items as ExtensionConfig),
-          lastSyncedAt: Date.now(),
-          lastError: null,
-        };
-        chrome.storage.sync.set(updated);
-        updateStatusUI(updated);
-      });
+    if (isDual) {
+      const prodRes = checks.find((c) => c.url === PROD_URL);
+      const localRes = checks.find((c) => c.url === LOCAL_URL);
+
+      const prodText = prodRes?.ok ? "Prod: OK" : "Prod: Error";
+      const localText = localRes?.ok ? "Local: OK" : "Local: Offline (dev server stopped)";
+
+      const anyOk = Boolean(prodRes?.ok || localRes?.ok);
+      showAlert(`${prodText} | ${localText}`, anyOk ? "success" : "error");
     } else {
-      const err = await res.json().catch(() => null);
-      showAlert(`Server error: ${err?.error || res.statusText}`, "error");
+      const res = checks[0];
+      if (res?.ok) {
+        showAlert("Connection successful! Server verified token.", "success");
+      } else {
+        showAlert(`Connection failed: ${res?.error || `HTTP ${res?.status}`}`, "error");
+      }
     }
+
+    chrome.storage.sync.get(DEFAULT_CONFIG, (items) => {
+      const updated = {
+        ...(items as ExtensionConfig),
+        lastSyncedAt: Date.now(),
+        lastError: null,
+      };
+      chrome.storage.sync.set(updated);
+      updateStatusUI(updated);
+    });
   } catch (err) {
     showAlert(`Connection failed: ${err instanceof Error ? err.message : "Network error"}`, "error");
   } finally {

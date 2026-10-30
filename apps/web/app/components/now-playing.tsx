@@ -33,8 +33,8 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
     let pollInterval: ReturnType<typeof setInterval> | null = null;
     let isSubscribed = true;
 
-    // Fetch initial state
-    fetch("/api/now-playing")
+    // Fetch initial state with cache busting
+    fetch(`/api/now-playing?_t=${Date.now()}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((json) => {
         if (json?.data && isSubscribed) {
@@ -77,10 +77,10 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
 
     connectSSE();
 
-    // Regular polling fallback to ensure real-time accuracy
+    // Fast polling fallback to ensure real-time accuracy across serverless instances
     pollInterval = setInterval(() => {
       if (!isSubscribed) return;
-      fetch("/api/now-playing")
+      fetch(`/api/now-playing?_t=${Date.now()}`, { cache: "no-store" })
         .then((res) => (res.ok ? res.json() : null))
         .then((json) => {
           if (json?.data && isSubscribed) {
@@ -90,7 +90,7 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
           }
         })
         .catch(() => {});
-    }, 8000);
+    }, 2500);
 
     return () => {
       isSubscribed = false;
@@ -106,7 +106,9 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
   const isInvalidTitle =
     !state?.title ||
     state.title.toLowerCase().trim() === "home" ||
-    Boolean(state.artist && state.title.toLowerCase().trim() === state.artist.toLowerCase().trim());
+    state.title.toLowerCase().trim() === "library" ||
+    state.title.toLowerCase().trim() === "explore" ||
+    state.title.toLowerCase().trim() === "youtube music";
 
   const hasSong = Boolean(state?.title && !isInvalidTitle);
   const isPlaying = Boolean(hasSong && state?.isPlaying && state?.isActive);

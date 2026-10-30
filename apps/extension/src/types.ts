@@ -12,6 +12,9 @@ export interface TrackInfo {
 
 export interface ExtensionConfig {
   apiUrl: string;
+  prodUrl?: string;
+  localUrl?: string;
+  dualSync?: boolean;
   token: string;
   enabled: boolean;
   lastSyncedAt?: number;
@@ -21,7 +24,10 @@ export interface ExtensionConfig {
 }
 
 export const DEFAULT_CONFIG: ExtensionConfig = {
-  apiUrl: "http://localhost:1234/api/now-playing",
+  apiUrl: "https://sahilkhedkar.com/api/now-playing",
+  prodUrl: "https://sahilkhedkar.com/api/now-playing",
+  localUrl: "http://localhost:1234/api/now-playing",
+  dualSync: true,
   token: "dev_secret_token_sahil_ytmusic_2026",
   enabled: true,
   lastStatus: "idle",

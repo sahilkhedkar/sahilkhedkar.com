@@ -184,6 +184,25 @@
     let artwork: string | null = getBestArtwork(meta?.artwork) || domData.artwork;
     let videoId: string | null = domData.videoId;
 
+    // 0. Try YouTube Music internal player API in MAIN world
+    try {
+      const ytmApp = document.querySelector("ytmusic-app") as unknown as { playerApi_?: { getVideoData?: () => { video_id?: string; title?: string; author?: string } } };
+      const playerBarEl = playerBar as unknown as { playerApi_?: { getVideoData?: () => { video_id?: string; title?: string; author?: string } } };
+      const pApi = playerBarEl?.playerApi_ || ytmApp?.playerApi_;
+      if (pApi?.getVideoData) {
+        const vData = pApi.getVideoData();
+        if (vData?.video_id && !videoId) {
+          videoId = vData.video_id;
+        }
+        if (vData?.title && !title && !isGenericOrArtistTitle(vData.title, vData.author)) {
+          title = vData.title;
+        }
+        if (vData?.author && (!artist || artist === "Unknown Artist")) {
+          artist = vData.author;
+        }
+      }
+    } catch {}
+
     // 1. Resolve Artist first
     if (meta?.artist && meta.artist.trim()) {
       artist = meta.artist.trim();
@@ -192,7 +211,6 @@
     }
 
     // 2. Title Resolution (priority: MediaSession official API -> PlayerBar DOM)
-    // MediaSession metadata is the purest source directly from YouTube Music audio player engine
     if (meta?.title && !isGenericOrArtistTitle(meta.title, artist)) {
       title = meta.title.trim();
     }
@@ -210,28 +228,44 @@
       }
     }
 
+    // Fallback: extract videoId from artwork if available
+    if (!videoId && artwork) {
+      const artMatch = artwork.match(/\/vi\/([a-zA-Z0-9_-]{11})\//);
+      if (artMatch && artMatch[1]) {
+        videoId = artMatch[1];
+      }
+    }
+
     // Final validation: Title MUST exist, CANNOT be generic ("Home", etc.), CANNOT be the artist
     if (!title || isGenericOrArtistTitle(title, artist)) {
       return null;
     }
 
-    // 2. Playback state detection
-    let isPlaying = false;
+    // 3. Playback state detection (Video element is the ultimate ground truth)
     const playPauseBtn = document.querySelector(
       "#play-pause-button, ytmusic-player-bar #play-pause-button, .play-pause-button"
     );
-    if (playPauseBtn) {
+    let isPlaying = false;
+    if (video && !video.paused && !video.ended && video.currentTime > 0) {
+      isPlaying = true;
+    } else if (navigator.mediaSession?.playbackState === "playing") {
+      isPlaying = true;
+    } else if (video && video.paused) {
+      isPlaying = false;
+    } else if (navigator.mediaSession?.playbackState === "paused") {
+      isPlaying = false;
+    } else if (playPauseBtn) {
       const btnTitle = (playPauseBtn.getAttribute("title") || "").toLowerCase();
-      const btnAria = (playPauseBtn.getAttribute("aria-label") || "").toLowerCase();
+      const btnAria = (
+        playPauseBtn.getAttribute("aria-label") ||
+        playPauseBtn.querySelector("button")?.getAttribute("aria-label") ||
+        ""
+      ).toLowerCase();
       if (btnTitle.includes("pause") || btnAria.includes("pause")) {
         isPlaying = true;
       } else if (btnTitle.includes("play") || btnAria.includes("play")) {
         isPlaying = false;
       }
-    } else if (navigator.mediaSession?.playbackState) {
-      isPlaying = navigator.mediaSession.playbackState === "playing";
-    } else if (video) {
-      isPlaying = !video.paused && !video.ended;
     }
 
     const progress = video ? Math.floor(video.currentTime || 0) : 0;
@@ -265,22 +299,24 @@
     } catch {}
   }
 
-  // Poll state every 500ms
-  setInterval(emitMediaSessionState, 500);
+  // Poll state every 400ms
+  setInterval(emitMediaSessionState, 400);
 
   // Video element event listeners
+  let lastAttachedVideo: HTMLVideoElement | null = null;
   function attachVideoListeners() {
     const video = document.querySelector("video");
-    if (video) {
-      video.addEventListener("play", () => setTimeout(emitMediaSessionState, 40));
-      video.addEventListener("pause", () => setTimeout(emitMediaSessionState, 40));
-      video.addEventListener("playing", () => setTimeout(emitMediaSessionState, 40));
-      video.addEventListener("ended", () => setTimeout(emitMediaSessionState, 40));
+    if (video && video !== lastAttachedVideo) {
+      lastAttachedVideo = video;
+      video.addEventListener("play", () => setTimeout(emitMediaSessionState, 30));
+      video.addEventListener("pause", () => setTimeout(emitMediaSessionState, 30));
+      video.addEventListener("playing", () => setTimeout(emitMediaSessionState, 30));
+      video.addEventListener("ended", () => setTimeout(emitMediaSessionState, 30));
     }
   }
 
   attachVideoListeners();
-  setInterval(attachVideoListeners, 2500);
+  setInterval(attachVideoListeners, 2000);
 
   // Document click listener on player controls
   document.addEventListener(
@@ -288,8 +324,9 @@
     (e) => {
       const target = e.target as HTMLElement | null;
       if (target?.closest("#play-pause-button, ytmusic-player-bar, .play-pause-button, tp-yt-paper-icon-button")) {
-        setTimeout(emitMediaSessionState, 40);
-        setTimeout(emitMediaSessionState, 200);
+        setTimeout(emitMediaSessionState, 30);
+        setTimeout(emitMediaSessionState, 150);
+        setTimeout(emitMediaSessionState, 350);
       }
     },
     true

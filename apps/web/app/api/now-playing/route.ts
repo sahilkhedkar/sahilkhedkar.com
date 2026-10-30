@@ -5,6 +5,7 @@ import type { NowPlayingState, NowPlayingUpdatePayload } from "../../lib/now-pla
 
 // Dynamic route configuration
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function getCorsHeaders() {
   return {
@@ -87,7 +88,9 @@ export async function GET() {
       {
         headers: {
           ...getCorsHeaders(),
-          "Cache-Control": "public, s-maxage=3, stale-while-revalidate=10",
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+          Pragma: "no-cache",
+          Expires: "0",
         },
       }
     );
@@ -240,27 +243,20 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Final safety: if STILL invalid, use previous valid title or album
-      if (isInvalid) {
-        if (currentState?.title && !isInvalidOrArtistTitle(currentState.title, resolvedArtist)) {
+      // Safety check: ensure title is not empty or literally generic navigation strings
+      const lowerT = resolvedTitle.toLowerCase().trim();
+      if (!resolvedTitle || lowerT === "home" || lowerT === "youtube music" || lowerT === "library" || lowerT === "explore") {
+        if (currentState?.title) {
           resolvedTitle = currentState.title;
-          isInvalid = false;
-        } else if (payload.album && !isInvalidOrArtistTitle(payload.album, resolvedArtist)) {
-          resolvedTitle = payload.album.trim();
-          isInvalid = false;
+        } else {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "Song title cannot be navigation labels like 'Home' or 'Library'.",
+            },
+            { status: 400, headers: getCorsHeaders() }
+          );
         }
-      }
-
-      // Reject update if title remains invalid (e.g. still "Home" or artist name)
-      if (isInvalid || isInvalidOrArtistTitle(resolvedTitle, resolvedArtist)) {
-        console.warn(`[NowPlaying POST rejected]: Title "${resolvedTitle}" is invalid or matches artist "${resolvedArtist}"`);
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Invalid song title: 'Home' and artist names are not allowed as song titles.",
-          },
-          { status: 400, headers: getCorsHeaders() }
-        );
       }
 
       newState = {

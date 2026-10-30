@@ -52,6 +52,7 @@
         <div class="label-row">
           <label for="api-url">API Endpoint URL</label>
           <div class="preset-group">
+            <button type="button" class="preset-chip" id="preset-both">Dual Sync</button>
             <button type="button" class="preset-chip" id="preset-prod">Production</button>
             <button type="button" class="preset-chip" id="preset-local">Local</button>
           </div>
@@ -62,7 +63,13 @@
           placeholder="https://sahilkhedkar.com/api/now-playing"
           required
         />
-        <span class="field-hint">You can edit this field or click a preset above</span>
+        <div class="dual-sync-row">
+          <label class="checkbox-label" title="Syncs to both production and localhost:1234 in parallel">
+            <input type="checkbox" id="dual-sync" checked />
+            <span>Dual Sync (Production + Local)</span>
+          </label>
+        </div>
+        <span class="field-hint">When Dual Sync is ON, both sahilkhedkar.com and localhost update simultaneously!</span>
       </div>
 
       <div class="form-group">

@@ -263,20 +263,30 @@ function extractTrackFromDOM(): TrackInfo | null {
   }
 
   // 2. Playback state
-  let isPlaying = false;
   const playPauseBtn = document.querySelector(
     "#play-pause-button, ytmusic-player-bar #play-pause-button, .play-pause-button"
   );
-  if (playPauseBtn) {
+  let isPlaying = false;
+  if (video && !video.paused && !video.ended && video.currentTime > 0) {
+    isPlaying = true;
+  } else if (navigator.mediaSession?.playbackState === "playing") {
+    isPlaying = true;
+  } else if (video && video.paused) {
+    isPlaying = false;
+  } else if (navigator.mediaSession?.playbackState === "paused") {
+    isPlaying = false;
+  } else if (playPauseBtn) {
     const btnTitle = (playPauseBtn.getAttribute("title") || "").toLowerCase();
-    const btnAria = (playPauseBtn.getAttribute("aria-label") || "").toLowerCase();
+    const btnAria = (
+      playPauseBtn.getAttribute("aria-label") ||
+      playPauseBtn.querySelector("button")?.getAttribute("aria-label") ||
+      ""
+    ).toLowerCase();
     if (btnTitle.includes("pause") || btnAria.includes("pause")) {
       isPlaying = true;
     } else if (btnTitle.includes("play") || btnAria.includes("play")) {
       isPlaying = false;
     }
-  } else if (video) {
-    isPlaying = !video.paused && !video.ended;
   }
 
   return {
@@ -311,7 +321,10 @@ function sendToBackground(msg: ExtensionMessage): Promise<unknown> {
   });
 }
 
+let isSyncing = false;
+
 async function checkAndUpdate(force: boolean = false) {
+  if (isSyncing) return;
   await loadConfig();
   const current = extractTrackFromDOM();
 
@@ -330,8 +343,8 @@ async function checkAndUpdate(force: boolean = false) {
   }
 
   const now = Date.now();
-  // Send heartbeat every 8 seconds while playing
-  const isHeartbeatTime = current.isPlaying && (now - lastSentTimestamp > 8000);
+  // Keep the server fresh: send heartbeat every 4 seconds while playing
+  const isHeartbeatTime = current.isPlaying && (now - lastSentTimestamp > 4000);
 
   const hasChanged =
     force ||
@@ -344,33 +357,48 @@ async function checkAndUpdate(force: boolean = false) {
     isHeartbeatTime;
 
   if (hasChanged) {
-    lastSentTrack = current;
-    lastSentTimestamp = now;
+    isSyncing = true;
+    try {
+      console.log(
+        `[NowPlaying Ext] Sending -> "${current.title}" by "${current.artist}" | videoId: ${current.videoId} | isPlaying: ${current.isPlaying}`
+      );
 
-    console.log(
-      `[NowPlaying Ext] Sending -> "${current.title}" by "${current.artist}" | videoId: ${current.videoId} | isPlaying: ${current.isPlaying}`
-    );
+      const res = (await sendToBackground({
+        type: "TRACK_CHANGED",
+        payload: current,
+      })) as { success?: boolean } | null;
 
-    await sendToBackground({
-      type: "TRACK_CHANGED",
-      payload: current,
-    });
+      if (res?.success) {
+        lastSentTrack = current;
+        lastSentTimestamp = now;
+      }
+    } finally {
+      isSyncing = false;
+    }
   }
 }
 
-function attachListeners() {
+let lastAttachedVideo: HTMLVideoElement | null = null;
+
+function ensureVideoListeners() {
   const video = getVideoElement();
-  if (video) {
+  if (video && video !== lastAttachedVideo) {
+    lastAttachedVideo = video;
     video.addEventListener("play", () => setTimeout(() => checkAndUpdate(true), 30));
     video.addEventListener("pause", () => setTimeout(() => checkAndUpdate(true), 30));
     video.addEventListener("playing", () => setTimeout(() => checkAndUpdate(true), 30));
     video.addEventListener("ended", () => setTimeout(() => checkAndUpdate(true), 30));
   }
+}
+
+function attachListeners() {
+  ensureVideoListeners();
 
   // Observe player bar DOM mutations
   const target = document.querySelector("ytmusic-player-bar") || document.body;
   if (target) {
     const observer = new MutationObserver(() => {
+      ensureVideoListeners();
       checkAndUpdate();
     });
     observer.observe(target, {
@@ -403,10 +431,11 @@ function attachListeners() {
   window.addEventListener("beforeunload", handleExit);
   window.addEventListener("pagehide", handleExit);
 
-  // Heartbeat check every 1.5s
+  // Heartbeat check every 1s
   setInterval(() => {
+    ensureVideoListeners();
     checkAndUpdate();
-  }, 1500);
+  }, 1000);
 }
 
 // Initialize

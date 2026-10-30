@@ -50,30 +50,13 @@ function updateBadge(track: TrackInfo | null, isPlaying: boolean) {
   }
 }
 
-async function sendToBackend(payload: Record<string, unknown>): Promise<{ success: boolean; error?: string }> {
-  await loadConfig();
-
-  if (!config.enabled) {
-    return { success: false, error: "Extension sync is disabled." };
-  }
-
-  const apiUrl = config.apiUrl || DEFAULT_CONFIG.apiUrl;
-  const token = config.token || DEFAULT_CONFIG.token;
-
-  if (!apiUrl) {
-    return { success: false, error: "API URL is not configured." };
-  }
-
-  if (!token) {
-    return { success: false, error: "Secret update token is not set." };
-  }
-
+async function postToUrl(
+  url: string,
+  token: string,
+  payload: Record<string, unknown>
+): Promise<{ success: boolean; url: string; error?: string }> {
   try {
-    console.log(
-      `[NowPlaying BG] Syncing -> "${payload.title || payload.action}" | isPlaying: ${payload.isPlaying}`
-    );
-
-    const res = await fetch(apiUrl, {
+    const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -82,35 +65,81 @@ async function sendToBackend(payload: Record<string, unknown>): Promise<{ succes
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      const errorJson = await res.json().catch(() => null);
-      const errorMsg = errorJson?.error || `HTTP ${res.status} ${res.statusText}`;
-      console.warn(`[NowPlaying BG] Error response: ${res.status} - ${errorMsg}`);
-      await saveConfig({
-        lastError: errorMsg,
-        lastStatus: "error",
-      });
-      return { success: false, error: errorMsg };
+    if (res.ok) {
+      return { success: true, url };
     }
 
-    console.log(`[NowPlaying BG] Sync successful: HTTP ${res.status}`);
+    const errorJson = await res.json().catch(() => null);
+    const errorMsg = errorJson?.error || `HTTP ${res.status} ${res.statusText}`;
+    return { success: false, url, error: errorMsg };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Network error";
+    return { success: false, url, error: msg };
+  }
+}
 
+async function sendToBackend(payload: Record<string, unknown>): Promise<{ success: boolean; error?: string }> {
+  await loadConfig();
+
+  if (!config.enabled) {
+    return { success: false, error: "Extension sync is disabled." };
+  }
+
+  const token = config.token || DEFAULT_CONFIG.token;
+  if (!token) {
+    return { success: false, error: "Secret update token is not set." };
+  }
+
+  // Determine target URLs
+  const targets: string[] = [];
+  const prodUrl = config.prodUrl || DEFAULT_CONFIG.prodUrl || "https://sahilkhedkar.com/api/now-playing";
+  const localUrl = config.localUrl || DEFAULT_CONFIG.localUrl || "http://localhost:1234/api/now-playing";
+  const isDualSync = config.dualSync !== false;
+
+  if (isDualSync) {
+    targets.push(prodUrl);
+    if (localUrl && !targets.includes(localUrl)) {
+      targets.push(localUrl);
+    }
+  } else {
+    const singleUrl = config.apiUrl || DEFAULT_CONFIG.apiUrl || prodUrl;
+    targets.push(singleUrl);
+  }
+
+  console.log(
+    `[NowPlaying BG] Syncing to [${targets.join(", ")}] -> "${payload.title || payload.action}" | isPlaying: ${payload.isPlaying}`
+  );
+
+  const outcomes = await Promise.all(targets.map((url) => postToUrl(url, token, payload)));
+
+  const successful = outcomes.filter((o) => o.success);
+  const failed = outcomes.filter((o) => !o.success);
+
+  for (const outcome of outcomes) {
+    if (outcome.success) {
+      console.log(`[NowPlaying BG] Sync success -> ${outcome.url}`);
+    } else {
+      console.warn(`[NowPlaying BG] Sync failed for ${outcome.url}: ${outcome.error}`);
+    }
+  }
+
+  // If at least one endpoint succeeded, consider sync a success
+  if (successful.length > 0) {
     await saveConfig({
       lastSyncedAt: Date.now(),
       lastError: null,
       lastStatus: payload.isPlaying ? "playing" : "paused",
     });
-
     return { success: true };
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Network error";
-    console.warn(`[NowPlaying BG] Network fetch exception: ${msg}`);
-    await saveConfig({
-      lastError: msg,
-      lastStatus: "offline",
-    });
-    return { success: false, error: msg };
   }
+
+  // All endpoints failed
+  const primaryError = failed[0]?.error || "All sync endpoints unreachable";
+  await saveConfig({
+    lastError: primaryError,
+    lastStatus: "error",
+  });
+  return { success: false, error: primaryError };
 }
 
 // Handle runtime messages from content script and popup
