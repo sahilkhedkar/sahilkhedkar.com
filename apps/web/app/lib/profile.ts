@@ -79,17 +79,6 @@ export const experiences: Experience[] = [
   },
 ];
 
-export const indexCards = [
-  { href: "/work", label: "Work", number: "01", icon: "work" },
-  { href: "/projects", label: "Projects", number: "02", icon: "projects" },
-  { href: "/know", label: "What I know", number: "03", icon: "know" },
-  { href: "/know#stack", label: "Tech I use", number: "04", icon: "tech" },
-  { href: "/blogs", label: "Blogs", number: "05", icon: "blogs" },
-  { href: "/hi", label: "Say hi", number: "06", icon: "hi" },
-] as const;
-
-export type IndexIcon = (typeof indexCards)[number]["icon"];
-
 export type Post = {
   slug: string;
   title: string;
@@ -102,8 +91,8 @@ export const posts = [
   {
     slug: "routing-in-nextjs",
     title: "Routing in NextJs",
-    date: "2025-03-12",
-    displayDate: "March 12, 2025",
+    date: "2026-10-30",
+    displayDate: "30 Oct 2026",
     description:
       "A guide to routing in Next.js (App Router) covering Catch-All Segments, Dynamic Routes, Nested Routes, and more.",
   },
@@ -119,13 +108,7 @@ export const headerNav = [
 export const footerNav = [
   ...headerNav,
   { href: "/projects", label: "Projects" },
-  { href: "/know", label: "What I know" },
-  { href: "/know#stack", label: "Tech" },
   { href: "/hi", label: "Say hi" },
   { href: "/gears", label: "Gears" },
-  { href: "/setup", label: "Setup" },
-  { href: "/terminal", label: "Terminal" },
-  { href: "/books", label: "Books" },
-  { href: "/movies", label: "Movies" },
   { href: "/blog/feed.xml", label: "RSS FEED" },
 ];
