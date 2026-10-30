@@ -6,7 +6,7 @@ export function HomeBlogs() {
 
   return (
     <div className="home-blogs-container">
-      <h2 className="home-blogs-heading">Blogs</h2>
+      <h2 className="text-xl font-bold home-blogs-heading">Blogs</h2>
 
       <div className="home-blogs-list">
         {displayedPosts.map((post) => (

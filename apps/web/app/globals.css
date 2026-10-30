@@ -928,7 +928,7 @@ html[data-theme="dark"] .skyline {
 }
 
 .section {
-  margin-top: 48px;
+  margin-top: 32px;
 }
 
 .section h2,
@@ -2595,11 +2595,13 @@ html[data-theme="light"] .back-to-blogs-link:hover {
 }
 
 .home-blogs-heading {
-  font-size: 1.45rem;
-  font-weight: 650;
-  letter-spacing: -0.025em;
-  color: var(--fg);
-  margin-bottom: 20px;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em;
+  color: var(--fg) !important;
+  opacity: 1 !important;
+  margin-bottom: 18px;
 }
 
 .home-blogs-list {
