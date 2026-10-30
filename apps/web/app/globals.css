@@ -2910,3 +2910,150 @@ html[data-theme="light"] .folder-structure-img-card {
   border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
+
+.not-found {
+  min-height: min(68vh, 720px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(20px, 5vw, 64px);
+  padding-block: 28px;
+}
+
+.not-found-art {
+  width: 100%;
+  max-width: 520px;
+  justify-self: center;
+  color: var(--fg);
+}
+
+.not-found-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  --foreground: var(--fg);
+  --background: var(--bg);
+  --primary: var(--fg);
+  --muted-foreground: var(--muted);
+}
+
+.not-found-art use {
+  width: 100%;
+  height: 100%;
+}
+
+html[data-theme="light"] .not-found-art svg {
+  --foreground: #171615;
+  --background: #fff;
+  --primary: #fff;
+  --muted-foreground: #77736d;
+}
+
+body:has(.not-found) .site-header,
+body:has(.not-found) .site-footer {
+  display: none;
+}
+
+body:has(.not-found) .main-frame {
+  width: 100%;
+  max-width: 1040px;
+  display: flex;
+  align-items: center;
+  padding: 32px clamp(20px, 5vw, 64px);
+}
+
+.not-found-theme {
+  position: absolute;
+  top: 24px;
+  right: clamp(20px, 5vw, 64px);
+}
+
+.not-found-copy {
+  max-width: 380px;
+}
+
+.not-found-code {
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 550;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.not-found-code span {
+  padding-inline: 5px;
+  color: var(--faint);
+}
+
+.not-found-copy h1 {
+  font-size: clamp(2.25rem, 5vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+
+.not-found-description {
+  max-width: 340px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.not-found-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  background: var(--fg);
+  color: var(--bg);
+  padding: 10px 16px;
+  border: 1px solid var(--fg);
+  border-radius: 6px;
+  font-size: 0.92rem;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.not-found-home:hover {
+  transform: translateY(-1px);
+  border-color: var(--soft);
+  background: var(--soft);
+  color: var(--bg);
+}
+
+.not-found-home span {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 700px) {
+  body:has(.not-found) .main-frame {
+    padding: 64px 20px 28px;
+  }
+
+  .not-found-theme {
+    top: 16px;
+    right: 20px;
+  }
+
+  .not-found {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding-block: 12px 40px;
+  }
+
+  .not-found-art {
+    width: min(100%, 380px);
+  }
+
+  .not-found-copy {
+    justify-self: center;
+    width: min(100%, 380px);
+    padding-inline: 8px;
+  }
+}
