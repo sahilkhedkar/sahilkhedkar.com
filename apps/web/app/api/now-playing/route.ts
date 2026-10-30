@@ -87,7 +87,7 @@ export async function GET() {
       {
         headers: {
           ...getCorsHeaders(),
-          "Cache-Control": "public, s-maxage=3, stale-while-revalidate=10",
+          "Cache-Control": "no-store, no-cache, max-age=0, must-revalidate",
         },
       }
     );
