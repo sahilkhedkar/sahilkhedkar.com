@@ -2929,3 +2929,8 @@ body:has(.not-found) .main-frame {
   height: auto;
 }
 
+.music-flow-points {
+  margin-top: 6px !important;
+  margin-bottom: 28px !important;
+}
+
