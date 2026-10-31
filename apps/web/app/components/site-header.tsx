@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { headerNav } from "../lib/profile";
+import { ViewCounter } from "./view-counter";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export function SiteHeader() {
             );
           })}
         </nav>
+        <ViewCounter />
       </div>
     </header>
   );
