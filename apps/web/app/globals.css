@@ -264,6 +264,56 @@ a:focus-visible {
   border-color: var(--tip-bg) transparent transparent;
 }
 
+.view-counter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding-inline: 8px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.view-counter:hover,
+.view-counter:focus-visible {
+  color: var(--fg);
+}
+
+.view-counter:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+.view-counter .social-tip {
+  top: calc(100% + 8px);
+  bottom: auto;
+  transform: translate(-50%, -4px);
+}
+
+.view-counter .social-tip::after {
+  top: auto;
+  bottom: 100%;
+  border-width: 0 5px 5px;
+  border-color: transparent transparent var(--tip-bg);
+}
+
+.view-counter:hover .social-tip,
+.view-counter:focus-visible .social-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.view-counter-count {
+  font-variant-numeric: tabular-nums;
+}
+
 .social-inline:hover .social-tip,
 .social-inline:focus-visible .social-tip,
 .social-boxed:hover .social-tip,
