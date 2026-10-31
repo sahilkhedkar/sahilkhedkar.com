@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { headerNav } from "../lib/profile";
-import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -21,7 +20,6 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <ThemeToggle />
       </div>
     </header>
   );

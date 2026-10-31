@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { ThemeToggle } from "./components/theme-toggle";
 
 export default function NotFound() {
   return (
     <section className="not-found" aria-labelledby="not-found-title">
-      <div className="not-found-theme"><ThemeToggle /></div>
       <div className="not-found-art" aria-hidden="true">
         <svg viewBox="0 0 600 600" role="presentation">
           <use href="/error-illustration-v3.svg#error-art" />
