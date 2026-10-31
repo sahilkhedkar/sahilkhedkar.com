@@ -2934,3 +2934,18 @@ body:has(.not-found) .main-frame {
   margin-bottom: 28px !important;
 }
 
+.file-tree {
+  max-width: 100%;
+  margin: 22px 0 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: #111;
+}
+
+.file-tree pre {
+  max-width: 100%;
+  padding: 18px 22px;
+  overflow: hidden;
+}
+
