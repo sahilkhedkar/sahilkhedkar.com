@@ -1,8 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap");
 
-:root,
-html[data-theme="dark"] {
+:root {
   --bg: #0e0d09;
   --fg: #f4f4f5;
   --muted: #a1a1aa;
@@ -41,57 +40,12 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
-html[data-theme="light"] {
-  --bg: #f7f5f0;
-  --fg: #1c1915;
-  --muted: #57534e;
-  --faint: #78716c;
-  --soft: #44403c;
-  --border: rgba(28, 25, 21, 0.12);
-  --hover: rgba(28, 25, 21, 0.06);
-  --avatar-bg: #87ceeb;
-  --tip-bg: #1c1915;
-  --tip-fg: #f7f5f0;
-  --quote-border: rgba(28, 25, 21, 0.18);
-  --quote-mark: rgba(28, 25, 21, 0.2);
-  --quote-text: #1c1915;
-  --quote-rule: rgba(28, 25, 21, 0.22);
-  --working-bg: rgba(22, 163, 74, 0.12);
-  --working-fg: #15803d;
-  --sky-a: #c4b197;
-  --sky-b: #d8c7ad;
-  --sky-c: #ad987c;
-  --sky-cornice: rgba(62, 48, 32, 0.38);
-  --sky-win-0: #5c5144;
-  --sky-win-1: #e2b25a;
-  --sky-win-2: #f0cc86;
-  --sky-win-3: #f6e2b4;
-  --sky-win-4: #fff8ea;
-  --sky-glow: 255, 206, 140;
-  --sky-glow-alpha: 0.45;
-  --sky-star: transparent;
-  --sky-hover: rgba(255, 248, 236, 0.95);
-  --sky-moon: transparent;
-  --sky-moon-lit: transparent;
-  --sky-moon-shade: transparent;
-  --sky-moon-glow: 0, 0, 0;
-  --sky-meteor: 0, 0, 0;
-  color-scheme: light;
-}
-
 html,
 body {
   width: 100%;
   min-height: 100%;
   background: var(--bg);
   color: var(--fg);
-}
-
-html.theme-ready,
-html.theme-ready body {
-  transition:
-    background-color 0.28s ease,
-    color 0.28s ease;
 }
 
 body {
@@ -131,12 +85,6 @@ a:focus-visible {
 
 ::selection {
   background-color: #d6d6d6;
-  color: #111111;
-  -webkit-text-fill-color: #111111;
-}
-
-html[data-theme="light"] ::selection {
-  background-color: #c8c8c8;
   color: #111111;
   -webkit-text-fill-color: #111111;
 }
@@ -215,82 +163,6 @@ html[data-theme="light"] ::selection {
   flex: 0 0 auto;
   background: var(--avatar-bg);
   color: transparent;
-}
-
-html.theme-ready .avatar {
-  transition: background-color 0.28s ease;
-}
-
-.theme-toggle {
-  position: relative;
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--fg);
-  cursor: pointer;
-}
-
-.theme-toggle:hover {
-  background: var(--hover);
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--fg);
-  outline-offset: 3px;
-}
-
-.theme-icon {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  transition:
-    opacity 200ms ease-out,
-    transform 200ms ease-out;
-}
-
-.icon-sun {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.icon-moon {
-  opacity: 0;
-  transform: scale(0.5);
-}
-
-html[data-theme="light"] .icon-sun {
-  opacity: 0;
-  transform: scale(0.5);
-}
-
-html[data-theme="light"] .icon-moon {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.theme-toggle .social-tip {
-  bottom: auto;
-  top: calc(100% + 8px);
-  transform: translate(-50%, -4px);
-}
-
-.theme-toggle .social-tip::after {
-  top: auto;
-  bottom: 100%;
-  border-width: 0 5px 5px;
-  border-color: transparent transparent var(--tip-bg);
-}
-
-.theme-toggle:hover .social-tip,
-.theme-toggle:focus-visible .social-tip {
-  opacity: 1;
-  transform: translate(-50%, 0);
 }
 
 .identity h1 {
@@ -471,18 +343,6 @@ html[data-theme="light"] .icon-moon {
     transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html[data-theme="light"] .now-playing {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.005) 100%
-  );
-  box-shadow:
-    0 2px 10px -2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
-}
-
 .now-playing:hover {
   border-color: rgba(255, 255, 255, 0.16);
   background: linear-gradient(
@@ -493,15 +353,6 @@ html[data-theme="light"] .now-playing {
   box-shadow:
     0 6px 20px -3px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
-}
-
-html[data-theme="light"] .now-playing:hover {
-  border-color: rgba(0, 0, 0, 0.15);
-  background: rgba(0, 0, 0, 0.035);
-  box-shadow:
-    0 6px 18px -3px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
   transform: translateY(-1px);
 }
 
@@ -535,11 +386,6 @@ html[data-theme="light"] .now-playing:hover {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #111;
   transition: transform 0.25s ease;
-}
-
-html[data-theme="light"] .now-playing-art {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #eee;
 }
 
 .now-playing:hover .now-playing-art {
@@ -580,12 +426,6 @@ html[data-theme="light"] .now-playing-art {
   justify-content: center;
   z-index: 2;
   transition: transform 0.25s ease;
-}
-
-html[data-theme="light"] .now-playing-yt-badge {
-  border-color: #ffffff;
-  background: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .now-playing:hover .now-playing-yt-badge {
@@ -631,10 +471,6 @@ html[data-theme="light"] .now-playing-yt-badge {
   color: #ffffff;
 }
 
-html[data-theme="light"] .now-playing:hover .now-playing-title {
-  color: #000000;
-}
-
 .now-playing-artist {
   font-size: 0.81rem;
   color: var(--muted);
@@ -673,14 +509,6 @@ html[data-theme="light"] .now-playing:hover .now-playing-title {
     0 0 6px rgba(255, 255, 255, 0.8),
     0 0 0 2px rgba(255, 255, 255, 0.25);
   animation: live-pulse-white 2.2s infinite ease-in-out;
-}
-
-html[data-theme="light"] .now-playing-status-dot.playing {
-  background: var(--fg);
-  box-shadow:
-    0 0 5px rgba(0, 0, 0, 0.3),
-    0 0 0 2px rgba(0, 0, 0, 0.12);
-  animation: live-pulse-dark 2.2s infinite ease-in-out;
 }
 
 .now-playing-status-dot.paused {
@@ -746,10 +574,6 @@ html[data-theme="light"] .now-playing-status-dot.playing {
   border-radius: 1.5px;
   background-color: #ffffff;
   transition: height 0.2s ease, opacity 0.2s ease;
-}
-
-html[data-theme="light"] .now-playing-bars .bar {
-  background-color: var(--fg);
 }
 
 /* When playing: Dancing equalizer in white */
@@ -884,12 +708,12 @@ html[data-theme="light"] .now-playing-bars .bar {
   touch-action: pan-y;
 }
 
-html[data-theme="dark"] .skyline {
+.skyline {
   height: 228px;
 }
 
 @media (max-width: 560px) {
-  html[data-theme="dark"] .skyline {
+  .skyline {
     height: 184px;
   }
 }
@@ -1292,14 +1116,6 @@ a.role-company:hover .role-arrow {
   position: relative;
   overflow: hidden;
   color: var(--ink);
-}
-
-html[data-theme="light"] .field {
-  --ink: #1c1915;
-  --rock: #c9c2b4;
-  --rock-hi: rgba(255, 255, 255, 0.72);
-  --rock-shade: rgba(28, 25, 21, 0.14);
-  --star: rgba(28, 25, 21, 0.45);
 }
 
 .field-sky,
@@ -2221,16 +2037,6 @@ html[data-theme="light"] .field {
   text-decoration: none !important;
 }
 
-html[data-theme="light"] .back-to-blogs-link {
-  color: #374151 !important;
-  background: transparent !important;
-}
-
-html[data-theme="light"] .back-to-blogs-link:hover {
-  background: rgba(0, 0, 0, 0.06) !important;
-  color: #000000 !important;
-}
-
 /* Folder Tree */
 .folder-tree-box {
   margin: 20px 0 24px;
@@ -2871,46 +2677,6 @@ html[data-theme="light"] .back-to-blogs-link:hover {
   text-decoration: none !important;
 }
 
-/* ==========================================================================
-   Light Mode Rules: Code box and images remain black/dark like dark mode
-   ========================================================================== */
-
-html[data-theme="light"] .code,
-html[data-theme="light"] .code-box,
-html[data-theme="light"] .code pre,
-html[data-theme="light"] .code-box pre {
-  background: #111111 !important;
-  border-color: rgba(255, 255, 255, 0.14) !important;
-}
-
-html[data-theme="light"] .code code,
-html[data-theme="light"] .code-box code {
-  color: #ffffff !important;
-}
-
-html[data-theme="light"] .tok-k,
-html[data-theme="light"] .tok-punc {
-  color: #8e8e8e !important;
-}
-
-html[data-theme="light"] .tok-f,
-html[data-theme="light"] .tok-tag,
-html[data-theme="light"] .tok-n,
-html[data-theme="light"] .tok-s {
-  color: #e09553 !important;
-}
-
-html[data-theme="light"] .tok-c {
-  color: #666666 !important;
-}
-
-html[data-theme="light"] .essay-hero-card,
-html[data-theme="light"] .folder-structure-img-card {
-  background: #000000 !important;
-  border-color: rgba(255, 255, 255, 0.14) !important;
-}
-
-
 .not-found {
   min-height: min(68vh, 720px);
   display: grid;
@@ -2943,13 +2709,6 @@ html[data-theme="light"] .folder-structure-img-card {
   height: 100%;
 }
 
-html[data-theme="light"] .not-found-art svg {
-  --foreground: #171615;
-  --background: #fff;
-  --primary: #fff;
-  --muted-foreground: #77736d;
-}
-
 body:has(.not-found) .site-header,
 body:has(.not-found) .site-footer {
   display: none;
@@ -2961,12 +2720,6 @@ body:has(.not-found) .main-frame {
   display: flex;
   align-items: center;
   padding: 32px clamp(20px, 5vw, 64px);
-}
-
-.not-found-theme {
-  position: absolute;
-  top: 24px;
-  right: clamp(20px, 5vw, 64px);
 }
 
 .not-found-copy {
@@ -3033,11 +2786,6 @@ body:has(.not-found) .main-frame {
 @media (max-width: 700px) {
   body:has(.not-found) .main-frame {
     padding: 64px 20px 28px;
-  }
-
-  .not-found-theme {
-    top: 16px;
-    right: 20px;
   }
 
   .not-found {
