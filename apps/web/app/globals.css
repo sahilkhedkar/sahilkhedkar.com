@@ -2918,3 +2918,14 @@ body:has(.not-found) .main-frame {
     padding-inline: 8px;
   }
 }
+.music-flow-sketch {
+  width: 100%;
+  margin: 24px 0 8px;
+}
+
+.music-flow-sketch img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
