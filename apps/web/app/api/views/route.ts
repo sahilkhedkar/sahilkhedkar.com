@@ -7,13 +7,14 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const requestHost = host?.split(",")[0]?.trim();
 
-  if (!origin || !host) {
+  if (!origin || !requestHost) {
     return NextResponse.json({ error: "Invalid page view request" }, { status: 403 });
   }
 
   try {
-    if (new URL(origin).host !== host.split(",")[0].trim()) {
+    if (new URL(origin).host !== requestHost) {
       return NextResponse.json({ error: "Invalid page view request" }, { status: 403 });
     }
   } catch {
