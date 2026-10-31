@@ -89,6 +89,14 @@ export type Post = {
 
 export const posts = [
   {
+    slug: "youtube-music-now-playing",
+    title: "How I Built a Live YouTube Music Widget for My Portfolio",
+    date: "2026-11-01",
+    displayDate: "1 Nov 2026",
+    description:
+      "A look inside the Chrome extension and real-time pipeline that carries the song playing in my browser to my portfolio.",
+  },
+  {
     slug: "routing-in-nextjs",
     title: "Routing in NextJs",
     date: "2026-10-30",
