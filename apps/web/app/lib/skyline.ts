@@ -124,7 +124,7 @@ export function layoutSkyline(
   dpr: number,
 ): SkylineLayout {
   const facades = planFacades(days);
-  // Taller frames keep a night-sky band. The compact light-theme frame stays tight.
+  // Taller frames keep a night-sky band; compact frames stay tight.
   const sky = height >= 206 ? Math.min(54, Math.max(42, height * 0.22)) : 22;
   const marginTop = sky;
   const marginBottom = 2;

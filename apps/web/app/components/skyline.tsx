@@ -176,17 +176,6 @@ export function Skyline({ days }: { days: ContributionDay[] }) {
     });
     resize.observe(host);
 
-    const theme = new MutationObserver(() => {
-      colors = null;
-      meteors.splice(0, meteors.length);
-      draw(performance.now());
-      kick();
-    });
-    theme.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onMotion = () => {
       reduced = motion.matches;
@@ -210,7 +199,6 @@ export function Skyline({ days }: { days: ContributionDay[] }) {
     return () => {
       if (raf !== 0) window.cancelAnimationFrame(raf);
       resize.disconnect();
-      theme.disconnect();
       seen.disconnect();
       motion.removeEventListener("change", onMotion);
       document.removeEventListener("visibilitychange", onVisibility);
