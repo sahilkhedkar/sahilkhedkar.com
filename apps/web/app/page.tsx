@@ -3,6 +3,7 @@ import { ExperienceList } from "./components/experience-list";
 import { HomeBlogs } from "./components/home-blogs";
 import { NowPlaying } from "./components/now-playing";
 import { Quote } from "./components/quote";
+import { Skills } from "./components/skills";
 import { SocialLinks } from "./components/social-links";
 import { profile } from "./lib/profile";
 import { getNowPlayingState } from "./lib/now-playing/storage";
@@ -35,6 +36,10 @@ export default async function Home() {
 
       <section className="section" aria-label="Blogs">
         <HomeBlogs />
+      </section>
+
+      <section className="section" aria-label="Skills and technologies">
+        <Skills />
       </section>
 
       <Quote />
