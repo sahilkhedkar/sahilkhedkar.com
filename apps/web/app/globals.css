@@ -2534,37 +2534,67 @@ a.role-company:hover .role-arrow {
   box-shadow: none !important;
 }
 
-.skills-section {
+.skills-panel {
+  width: 100%;
+}
+
+.skills-heading {
+  margin: 0 0 18px !important;
+  color: var(--fg) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.skills-content {
   width: 100%;
 }
 
 .skills-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   list-style: none;
 }
 
 .skill-chip {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 5px 11px;
+  justify-content: center;
+  min-height: 30px;
+  gap: 7px;
+  padding: 5px 9px;
   border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--soft);
-  font-size: 0.82rem;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
   line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
   transition:
     border-color 180ms ease,
     background-color 180ms ease,
-    color 180ms ease;
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .skill-chip:hover {
-  border-color: rgba(255, 255, 255, 0.24);
+  z-index: 1;
+  border-color: rgba(255, 255, 255, 0.28);
   background: var(--hover);
   color: var(--fg);
+  transform: scale(1.03);
+}
+
+.skill-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  color: currentColor;
 }
 
 .show-all-blogs-link .arrow {
