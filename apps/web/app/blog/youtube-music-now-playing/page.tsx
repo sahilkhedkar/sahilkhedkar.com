@@ -1,1 +1,5 @@
-export { default, metadata } from "../../blogs/youtube-music-now-playing/page";
+import { permanentRedirect } from "next/navigation";
+
+export default function OldYouTubeMusicPostUrl() {
+  permanentRedirect("/blogs/ytmusic-widget");
+}
