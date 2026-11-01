@@ -85,16 +85,29 @@ export type Post = {
   date: string;
   displayDate: string;
   description: string;
+  tags: readonly string[];
+  heroImage: string;
+  socialImage: {
+    src: string;
+    width: number;
+    height: number;
+    type: "image/png" | "image/jpeg" | "image/webp";
+  };
+  imageAlt: string;
 };
 
 export const posts = [
   {
-    slug: "youtube-music-now-playing",
+    slug: "ytmusic-widget",
     title: "How I Built a Live YouTube Music Widget for My Portfolio",
     date: "2026-11-01",
     displayDate: "1 Nov 2026",
     description:
       "A look inside the Chrome extension and real-time pipeline that carries the song playing in my browser to my portfolio.",
+    tags: ["Backend"],
+    heroImage: "/blog/yt-music-banner.svg",
+    socialImage: { src: "/blog/yt-music-banner.png", width: 1200, height: 675, type: "image/png" },
+    imageAlt: "YouTube Music logo with red sound waves",
   },
   {
     slug: "routing-in-nextjs",
@@ -103,6 +116,10 @@ export const posts = [
     displayDate: "30 Oct 2026",
     description:
       "A guide to routing in Next.js (App Router) covering Catch-All Segments, Dynamic Routes, Nested Routes, and more.",
+    tags: ["Next.js"],
+    heroImage: "/blog/nextjs-hero.svg",
+    socialImage: { src: "/blog/nextjs-hero.png", width: 1200, height: 675, type: "image/png" },
+    imageAlt: "Next.js App Router graphic",
   },
 ] as const;
 
