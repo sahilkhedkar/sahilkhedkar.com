@@ -1,1 +1,1 @@
-export { default, metadata } from "../../blogs/routing-in-nextjs/page";
+export { default, generateMetadata } from "../../blogs/routing-in-nextjs/page";
