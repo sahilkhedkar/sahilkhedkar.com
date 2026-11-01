@@ -24,7 +24,7 @@ export function ShareButton({ title }: { title: string }) {
     };
   }, [open]);
 
-  const message = url ? `Check out: ${title}\n\n${url}` : `Check out: ${title}`;
+  const message = url ? `Check out: ${title}\n${url}` : `Check out: ${title}`;
 
   async function copyLink() {
     try {
