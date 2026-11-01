@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1774 1000" role="img" aria-labelledby="title desc">
+  <title id="title">YouTube Music</title>
+  <desc id="desc">YouTube Music wordmark with a red play button and fine red sound waves on a white background.</desc>
+  <rect width="1774" height="1000" fill="#fff"/>
+  <g fill="none" stroke="#ff2028" stroke-width="1.2" opacity=".75">
+    <path d="M0 309 C170 315 220 487 396 549 S690 736 890 574 1118 312 1303 264 1491 530 1774 395"/>
+    <path d="M0 327 C170 331 229 495 403 558 S691 721 886 565 1117 325 1304 278 1502 520 1774 409"/>
+    <path d="M0 346 C172 348 238 503 411 567 S693 705 882 556 1115 339 1306 293 1513 510 1774 423"/>
+    <path d="M0 365 C174 366 247 511 418 577 S695 689 878 547 1114 352 1308 308 1524 500 1774 438"/>
+    <path d="M0 384 C176 384 256 519 425 586 S697 673 874 538 1112 366 1310 323 1535 491 1774 452"/>
+    <path d="M0 403 C178 401 265 527 433 596 S699 657 870 529 1111 379 1312 338 1546 481 1774 467"/>
+    <path d="M0 422 C180 418 274 535 440 606 S701 641 866 520 1109 392 1314 353 1557 471 1774 481"/>
+    <path d="M0 441 C182 436 283 543 448 615 S703 625 862 511 1108 405 1316 368 1568 461 1774 495"/>
+    <path d="M0 460 C184 453 292 551 455 625 S705 609 858 502 1106 419 1318 383 1579 451 1774 510"/>
+    <path d="M0 479 C186 471 301 559 463 635 S707 593 854 493 1105 432 1320 398 1590 441 1774 524"/>
+    <path d="M0 498 C188 488 310 567 470 644 S709 577 850 484 1103 446 1322 413 1601 431 1774 538"/>
+    <path d="M0 517 C190 506 319 575 478 654 S711 561 846 475 1102 459 1324 428 1612 421 1774 553"/>
+  </g>
+  <g transform="translate(371 343)">
+    <circle cx="96" cy="96" r="96" fill="#ff1018"/>
+    <circle cx="96" cy="96" r="55" fill="none" stroke="#fff" stroke-width="8"/>
+    <path d="M81 65 L132 96 L81 127 Z" fill="#fff"/>
+  </g>
+  <text x="588" y="483" fill="#090909" font-family="Arial, Helvetica, sans-serif" font-size="139" font-weight="700" letter-spacing="-7">YouTube Music</text>
+</svg>
