@@ -35,8 +35,8 @@ export default function NextJSRoutingGuide() {
       {/* Hero Banner with Next.js Grid Graphic */}
       <div className="essay-hero-card">
         <img
-          src={post.heroImage}
-          alt={post.imageAlt}
+          src={post.coverImage.src}
+          alt={post.coverImage.alt}
         />
       </div>
 
