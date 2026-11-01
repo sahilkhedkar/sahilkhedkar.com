@@ -24,7 +24,7 @@ export function ShareButton({ title }: { title: string }) {
     };
   }, [open]);
 
-  const message = `Check out: ${title}`;
+  const message = url ? `Check out: ${title}\n\n${url}` : `Check out: ${title}`;
 
   async function copyLink() {
     try {
@@ -36,7 +36,7 @@ export function ShareButton({ title }: { title: string }) {
     }
   }
 
-  const xUrl = `https://x.com/intent/post?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`;
+  const xUrl = `https://x.com/intent/post?text=${encodeURIComponent(message)}`;
   const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 
   return (
