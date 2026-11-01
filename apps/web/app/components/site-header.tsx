@@ -2,11 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { headerNav } from "../lib/profile";
 import { ViewCounter } from "./view-counter";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [blogSearch, setBlogSearch] = useState("");
+
+  useEffect(() => {
+    setBlogSearch("");
+    window.dispatchEvent(new CustomEvent("blog-search-change", { detail: "" }));
+  }, [pathname]);
+
+  function updateBlogSearch(value: string) {
+    setBlogSearch(value);
+    window.dispatchEvent(new CustomEvent("blog-search-change", { detail: value }));
+  }
 
   return (
     <header className="site-header">
@@ -21,7 +33,33 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <ViewCounter />
+        <div className="header-actions">
+          {pathname === "/blogs" && (
+            <label className="header-blog-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-4-4" />
+              </svg>
+              <input
+                type="search"
+                value={blogSearch}
+                placeholder="Search blogs..."
+                aria-label="Search blogs"
+                onChange={(event) => updateBlogSearch(event.target.value)}
+              />
+              {blogSearch && (
+                <button
+                  type="button"
+                  aria-label="Clear blog search"
+                  onClick={() => updateBlogSearch("")}
+                >
+                  ×
+                </button>
+              )}
+            </label>
+          )}
+          <ViewCounter />
+        </div>
       </div>
     </header>
   );
