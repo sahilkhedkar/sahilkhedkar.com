@@ -20,6 +20,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sahilkhedkar.com"),
   title: {
     default: "Sahil Khedkar",
     template: "%s · Sahil Khedkar",
