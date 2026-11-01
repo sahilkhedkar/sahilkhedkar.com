@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { SiteFooter } from "./components/site-footer";
 import { SiteHeader } from "./components/site-header";
+import { PageEntrance } from "./components/page-entrance";
+import { BackToTop } from "./components/back-to-top";
 import { profile } from "./lib/profile";
 import "./globals.css";
 
@@ -36,11 +38,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <body>
-        <div className="shell">
-          <SiteHeader />
-          <main className="frame main-frame">{children}</main>
-          <SiteFooter />
-        </div>
+        <PageEntrance>
+          <div className="shell">
+            <SiteHeader />
+            <main className="frame main-frame">{children}</main>
+            <SiteFooter />
+          </div>
+          <BackToTop />
+        </PageEntrance>
       </body>
     </html>
   );
