@@ -11,7 +11,7 @@ function escapeXml(value: string) {
 export function GET() {
   const items = posts
     .map((post) => {
-      const link = `https://sahilkhedkar.com/blog/${post.slug}`;
+      const link = `https://sahilkhedkar.com/blogs/${post.slug}`;
       return `    <item>
       <title>${escapeXml(post.title)}</title>
       <link>${link}</link>
@@ -26,7 +26,7 @@ export function GET() {
 <rss version="2.0">
   <channel>
     <title>Sahil Khedkar</title>
-    <link>https://sahilkhedkar.com/blog</link>
+    <link>https://sahilkhedkar.com/blogs</link>
     <description>Writing by Sahil Khedkar.</description>
 ${items}
   </channel>
