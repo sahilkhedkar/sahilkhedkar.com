@@ -14,9 +14,14 @@ export function ReadingProgress() {
     headings.forEach((heading, index) => {
       if (!heading.id) heading.id = `reading-section-${index}`;
     });
+    const lastHeading = headings.at(-1);
     setSection(headings[0]?.innerText ?? "");
 
     const observer = new IntersectionObserver((entries) => {
+      if (lastHeading && article.getBoundingClientRect().bottom <= window.innerHeight + 1) {
+        setSection(lastHeading.innerText);
+        return;
+      }
       const active = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.boundingClientRect.top - a.boundingClientRect.top)[0];
@@ -31,6 +36,9 @@ export function ReadingProgress() {
         const rect = article.getBoundingClientRect();
         const total = article.scrollHeight - window.innerHeight;
         const walked = Math.max(0, -rect.top);
+        if (lastHeading && rect.bottom <= window.innerHeight + 1) {
+          setSection(lastHeading.innerText);
+        }
         setProgress(total > 0 ? Math.min(1, walked / total) : 0);
         setVisible(rect.top < -180 && rect.bottom > 0);
       });
