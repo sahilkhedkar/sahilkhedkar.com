@@ -3,14 +3,16 @@ import Link from "next/link";
 import { CodeBlock } from "../../components/code-block";
 import { FolderTree } from "../../components/folder-tree";
 import { ShareButton } from "../../components/share-button";
+import { ReadingProgress } from "../../components/reading-progress";
+import { ImageLightbox } from "../../components/image-lightbox";
+import { generateBlogMetadata } from "../../lib/blog-metadata";
 import { posts, type Post } from "../../lib/profile";
 
 const post = posts.find((p: Post) => p.slug === "routing-in-nextjs")!;
 
-export const metadata: Metadata = {
-  title: post.title,
-  description: post.description,
-};
+export function generateMetadata(): Metadata {
+  return generateBlogMetadata(post.slug);
+}
 
 export default function NextJSRoutingGuide() {
   return (
@@ -31,10 +33,10 @@ export default function NextJSRoutingGuide() {
       </div>
 
       {/* Hero Banner with Next.js Grid Graphic */}
-      <div className="essay-hero-card" aria-hidden="true">
+      <div className="essay-hero-card">
         <img
-          src="/blog/nextjs-hero.svg"
-          alt="Next.js App Router"
+          src={post.heroImage}
+          alt={post.imageAlt}
         />
       </div>
 
@@ -45,22 +47,15 @@ export default function NextJSRoutingGuide() {
         <div className="post-meta-date">
           <svg
             className="calendar-icon"
-            viewBox="0 0 24 24"
-            width="14"
-            height="14"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            viewBox="0 0 256 256"
+            width="24"
+            height="24"
+            fill="currentColor"
             aria-hidden="true"
           >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-            <line x1="16" y1="2" x2="16" y2="6" />
-            <line x1="8" y1="2" x2="8" y2="6" />
-            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z" />
           </svg>
-          <time dateTime={post.date}>{post.displayDate}</time>
+          <time dateTime={post.date}>{new Date(`${post.date}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" })}</time>
         </div>
         <ShareButton title={post.title} />
       </div>
@@ -138,13 +133,18 @@ export default function NextJSRoutingGuide() {
       <h2>Folder Structure for the Pages</h2>
       <p>After adding these pages, your <code>src/app</code> directory will look like this:</p>
 
-      <div className="folder-structure-img-card">
+      <figure className="folder-structure-img-card">
         <img
           src="/blog/folder-structure.png"
           alt="Folder Structure for Next.js App Router"
           className="folder-structure-img"
         />
-      </div>
+        <figcaption>Folders map to URL segments, while each <code>page.tsx</code> file supplies the page for that route.</figcaption>
+      </figure>
+
+      <blockquote className="blog-quote">
+        <p>A folder gives a route its address. A <code>page.tsx</code> file makes that address render a page, and a <code>layout.tsx</code> file adds a shared frame around its children.</p>
+      </blockquote>
 
       <p>
         Notice the core principle: the name of each folder corresponds directly to the URL segment,
@@ -452,6 +452,18 @@ export default function NextJSRoutingGuide() {
         and catch-all routes (<code>[...slug]</code>), you can structure virtually any web application
         intuitively and maintainably.
       </p>
+      <section className="final-words" aria-labelledby="final-words-title">
+        <h2 id="final-words-title">Final Words</h2>
+        <p>Routing gets easier when you follow the path the browser takes: folders become URL segments, layouts shape the shared frame, and route files decide what each address returns.</p>
+        <p>Try building one small route tree yourself, then add a nested page and a dynamic segment. Seeing the URL and file structure line up is the quickest way to make the conventions stick.</p>
+      </section>
+      <blockquote className="gita-quote">
+        <svg aria-hidden="true" viewBox="0 0 105 78"><path d="M25.086 77.292c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622C1.054 58.534 0 53.411 0 47.686c0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C28.325 3.917 33.599 1.507 39.324 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Zm54.24 0c-4.821 0-9.115-1.205-12.882-3.616-3.767-2.561-6.78-6.102-9.04-10.622-2.11-4.52-3.164-9.643-3.164-15.368 0-5.273.904-10.396 2.712-15.368 1.959-4.972 4.746-9.567 8.362-13.786a59.042 59.042 0 0 1 12.43-11.3C82.565 3.917 87.839 1.507 93.564 0l11.074 13.786c-6.479 2.561-11.677 5.951-15.594 10.17-3.767 4.219-5.65 7.835-5.65 10.848 0 1.356.377 2.863 1.13 4.52.904 1.507 2.637 3.089 5.198 4.746 3.767 2.41 6.328 4.972 7.684 7.684 1.507 2.561 2.26 5.5 2.26 8.814 0 5.123-1.959 9.19-5.876 12.204-3.767 3.013-8.588 4.52-14.464 4.52Z" /></svg>
+        <p>“True education combines <strong>theoretical knowledge</strong> with <strong>realization</strong>, so what we learn becomes <strong>skillful living</strong> and freedom from ignorance.”</p>
+        <cite>— Bhagavad Gita</cite>
+      </blockquote>
+      <ReadingProgress />
+      <ImageLightbox />
     </article>
   );
 }
