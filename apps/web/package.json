@@ -14,6 +14,7 @@
     "@repo/ui": "*",
     "@upstash/redis": "^1.39.0",
     "ioredis": "^6.0.0",
+    "motion": "^14.9.0",
     "next": "16.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
