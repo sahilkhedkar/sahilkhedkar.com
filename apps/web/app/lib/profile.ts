@@ -86,14 +86,16 @@ export type Post = {
   displayDate: string;
   description: string;
   tags: readonly string[];
-  heroImage: string;
-  socialImage: {
+  coverImage: {
     src: string;
-    width: number;
-    height: number;
-    type: "image/png" | "image/jpeg" | "image/webp";
+    alt: string;
+    socialPreview: {
+      src: string;
+      width: number;
+      height: number;
+      type: "image/png" | "image/jpeg" | "image/webp";
+    };
   };
-  imageAlt: string;
 };
 
 export const posts = [
@@ -105,9 +107,11 @@ export const posts = [
     description:
       "A look inside the Chrome extension and real-time pipeline that carries the song playing in my browser to my portfolio.",
     tags: ["Backend"],
-    heroImage: "/blog/yt-music-banner.svg",
-    socialImage: { src: "/blog/yt-music-banner.png", width: 1200, height: 675, type: "image/png" },
-    imageAlt: "YouTube Music logo with red sound waves",
+    coverImage: {
+      src: "/blog/yt-music-banner.svg",
+      alt: "YouTube Music logo with red sound waves",
+      socialPreview: { src: "/blog/yt-music-banner.png", width: 1200, height: 677, type: "image/png" },
+    },
   },
   {
     slug: "routing-in-nextjs",
@@ -117,9 +121,11 @@ export const posts = [
     description:
       "A guide to routing in Next.js (App Router) covering Catch-All Segments, Dynamic Routes, Nested Routes, and more.",
     tags: ["Next.js"],
-    heroImage: "/blog/nextjs-hero.svg",
-    socialImage: { src: "/blog/nextjs-hero.png", width: 1200, height: 675, type: "image/png" },
-    imageAlt: "Next.js App Router graphic",
+    coverImage: {
+      src: "/blog/nextjs-hero.svg",
+      alt: "Next.js App Router graphic",
+      socialPreview: { src: "/blog/nextjs-hero.png", width: 1200, height: 680, type: "image/png" },
+    },
   },
 ] as const;
 
