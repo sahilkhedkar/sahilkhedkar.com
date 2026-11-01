@@ -8,7 +8,7 @@ export function generateBlogMetadata(slug: string): Metadata {
   if (!post) return {};
 
   const canonicalUrl = new URL(`/blogs/${post.slug}`, siteOrigin).toString();
-  const imageUrl = new URL(post.socialImage.src, siteOrigin).toString();
+  const imageUrl = new URL(post.coverImage.socialPreview.src, siteOrigin).toString();
 
   return {
     title: post.title,
@@ -22,17 +22,17 @@ export function generateBlogMetadata(slug: string): Metadata {
       url: canonicalUrl,
       images: [{
         url: imageUrl,
-        width: post.socialImage.width,
-        height: post.socialImage.height,
-        type: post.socialImage.type,
-        alt: post.imageAlt,
+        width: post.coverImage.socialPreview.width,
+        height: post.coverImage.socialPreview.height,
+        type: post.coverImage.socialPreview.type,
+        alt: post.coverImage.alt,
       }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [{ url: imageUrl, alt: post.imageAlt }],
+      images: [{ url: imageUrl, alt: post.coverImage.alt }],
     },
   };
 }
