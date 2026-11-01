@@ -31,7 +31,9 @@ export function PageEntrance({ children }: { children: React.ReactNode }) {
     const root = scope.current;
     if (!root) return;
 
-    const targets = Array.from(root.querySelectorAll(entranceTargets));
+    const targets = Array.from(
+      root.querySelectorAll(entranceTargets) as NodeListOf<HTMLElement>,
+    );
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (targets.length) {
       animate(
