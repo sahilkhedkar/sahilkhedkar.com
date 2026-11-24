@@ -7,26 +7,9 @@ interface NowPlayingProps {
   initialData?: NowPlayingState | null;
 }
 
-export function YouTubeMusicBadge() {
-  return (
-    <div className="now-playing-yt-badge" title="YouTube Music" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" className="now-playing-yt-badge-svg">
-        <circle cx="12" cy="12" r="11" fill="#FF0000" />
-        <circle cx="12" cy="12" r="7" stroke="#FFFFFF" strokeWidth="1.5" fill="none" />
-        <polygon points="10,8.5 16,12 10,15.5" fill="#FFFFFF" />
-      </svg>
-    </div>
-  );
-}
-
 export function NowPlaying({ initialData }: NowPlayingProps) {
   const [state, setState] = useState<NowPlayingState | null>(initialData ?? null);
-  const [imageError, setImageError] = useState(false);
   const [, startTransition] = useTransition();
-
-  useEffect(() => {
-    setImageError(false);
-  }, [state?.artwork]);
 
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -116,7 +99,6 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
   // Always show recent music when not playing (never "Not listening right now")
   const displayTitle = hasSong ? state!.title : "Starboy";
   const displayArtist = hasSong ? (state?.artist || "YouTube Music") : "The Weeknd ft. Daft Punk";
-  const displayArtwork = hasSong ? state?.artwork : "https://i.ytimg.com/vi/34Na4j8AVgA/hqdefault.jpg";
   const displayVideoId = hasSong ? state?.videoId : "34Na4j8AVgA";
 
   // Link to YouTube Music track
@@ -125,8 +107,6 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
     : displayTitle
       ? `https://music.youtube.com/search?q=${encodeURIComponent(`${displayTitle} ${displayArtist || ""}`)}`
       : "https://music.youtube.com";
-
-  const statusLabel = isPlaying ? "Playing" : "Recently played";
 
   return (
     <div
@@ -140,65 +120,17 @@ export function NowPlaying({ initialData }: NowPlayingProps) {
         className="now-playing-link"
         title={displayTitle ? `Listen to "${displayTitle}" on YouTube Music` : undefined}
       >
-        {/* Poster with Circular YouTube Music Badge on bottom-right */}
-        <div className="now-playing-art-wrap">
-          {displayArtwork && !imageError ? (
-            <img
-              src={displayArtwork}
-              alt={displayTitle || "Album Artwork"}
-              className="now-playing-art"
-              width={44}
-              height={44}
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="now-playing-art-fallback-box">
-              <svg
-                className="now-playing-art-fallback"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M9 18V5l12-2v13" />
-                <circle cx="6" cy="18" r="3" />
-                <circle cx="18" cy="16" r="3" />
-              </svg>
-            </div>
-          )}
-          <YouTubeMusicBadge />
+        {/* Animated equalizer bars */}
+        <div className="now-playing-bars playing" aria-hidden="true">
+          <span className="bar bar-1" />
+          <span className="bar bar-2" />
+          <span className="bar bar-3" />
         </div>
 
-        {/* Center Details: Song Title & Artist */}
-        <div className="now-playing-content">
-          <div className="now-playing-title-wrap">
-            <span className="now-playing-title">{displayTitle}</span>
-          </div>
-
-          {displayArtist && <div className="now-playing-artist">{displayArtist}</div>}
-        </div>
-
-        {/* Right Side: Status Text & Animated Bars when actively playing */}
-        <div className="now-playing-right">
-          <div className="now-playing-status-inline">
-            <span className="now-playing-status-label">{statusLabel}</span>
-          </div>
-
-          {/* Dancing Audio Bars only visible when actively playing */}
-          {isPlaying && (
-            <div className="now-playing-bars playing" aria-hidden="true">
-              <span className="bar bar-1" />
-              <span className="bar bar-2" />
-              <span className="bar bar-3" />
-              <span className="bar bar-4" />
-            </div>
-          )}
-        </div>
+        {/* Song title and artist inline */}
+        <span className="now-playing-title">{displayTitle}</span>
+        <span className="now-playing-separator">·</span>
+        {displayArtist && <span className="now-playing-artist">{displayArtist}</span>}
       </a>
     </div>
   );
