@@ -263,19 +263,15 @@ function extractTrackFromDOM(): TrackInfo | null {
   }
 
   // 2. Playback state
+  // Priority: play/pause button UI state > MediaSession > video element
+  // (video.paused is unreliable on YouTube Music in background tabs)
   const playPauseBtn = document.querySelector(
     "#play-pause-button, ytmusic-player-bar #play-pause-button, .play-pause-button"
   );
   let isPlaying = false;
-  if (video && !video.paused && !video.ended && video.currentTime > 0) {
-    isPlaying = true;
-  } else if (navigator.mediaSession?.playbackState === "playing") {
-    isPlaying = true;
-  } else if (video && video.paused) {
-    isPlaying = false;
-  } else if (navigator.mediaSession?.playbackState === "paused") {
-    isPlaying = false;
-  } else if (playPauseBtn) {
+
+  if (playPauseBtn) {
+    // If button says "Pause", music IS currently playing
     const btnTitle = (playPauseBtn.getAttribute("title") || "").toLowerCase();
     const btnAria = (
       playPauseBtn.getAttribute("aria-label") ||
@@ -287,6 +283,12 @@ function extractTrackFromDOM(): TrackInfo | null {
     } else if (btnTitle.includes("play") || btnAria.includes("play")) {
       isPlaying = false;
     }
+  } else if (navigator.mediaSession?.playbackState === "playing") {
+    isPlaying = true;
+  } else if (navigator.mediaSession?.playbackState === "paused") {
+    isPlaying = false;
+  } else if (video && !video.paused && !video.ended && video.currentTime > 0) {
+    isPlaying = true;
   }
 
   return {
