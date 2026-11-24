@@ -25,8 +25,8 @@ export default async function Home() {
           </div>
         </div>
         <p className="bio">love to build cool stuff</p>
-        <SocialLinks variant="inline" />
         <NowPlaying initialData={initialData} />
+        <SocialLinks variant="inline" />
         <ContributionGraph />
       </section>
 
@@ -38,7 +38,7 @@ export default async function Home() {
         <HomeBlogs />
       </section>
 
-      <section className="section" aria-label="Skills and technologies">
+      <section className="section" aria-label="Stack">
         <Skills />
       </section>
 
