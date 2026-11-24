@@ -2722,12 +2722,12 @@ a.role-company:hover .role-arrow {
 }
 
 .home-blog-title {
-  font-family: "Instrument Serif", Georgia, serif !important;
-  font-size: 1.4rem;
-  font-weight: 400;
+  font-family: inherit !important;
+  font-size: 1rem;
+  font-weight: 550;
   color: var(--fg);
-  letter-spacing: -0.015em;
-  line-height: 1.3;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
   text-decoration: none !important;
   transition: color 0.15s ease;
 }
@@ -3105,11 +3105,11 @@ a.role-company:hover .role-arrow {
 }
 
 .blogs-item-title {
-  font-family: "Instrument Serif", Georgia, serif !important;
-  font-size: 1.55rem !important;
-  font-weight: 400 !important;
+  font-family: inherit !important;
+  font-size: 1.05rem !important;
+  font-weight: 550 !important;
   color: var(--fg) !important;
-  line-height: 1.25;
+  line-height: 1.35;
   letter-spacing: -0.01em;
   text-decoration: none !important;
   transition: color 0.15s ease;
