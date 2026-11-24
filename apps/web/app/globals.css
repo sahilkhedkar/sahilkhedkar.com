@@ -2877,6 +2877,167 @@ a.role-company:hover .role-arrow {
   color: currentColor;
 }
 
+/* ==========================================================================
+   Stack Section
+   ========================================================================== */
+
+#skills,
+.stack-container {
+  width: 100%;
+}
+
+#skills-heading,
+.stack-heading {
+  font-family: inherit !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+  color: var(--fg) !important;
+  opacity: 1 !important;
+  line-height: 1.3 !important;
+  margin-bottom: 18px !important;
+}
+
+#skills .border-t,
+.stack-grid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-top: none !important;
+}
+
+#skills .grid,
+.stack-row {
+  display: grid !important;
+  grid-template-columns: 13rem minmax(0, 1fr) !important;
+  column-gap: 2rem !important;
+  align-items: flex-start !important;
+  padding: 14px 0 !important;
+  border-bottom: none !important;
+}
+
+#skills .grid > div:first-child,
+.stack-category {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: #a1a1aa !important;
+  padding-top: 5px !important;
+}
+
+#skills .grid > div:first-child svg,
+.stack-category-icon {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  color: #8e8e93 !important;
+}
+
+#skills .grid > div:first-child span,
+.stack-category-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.86rem !important;
+  font-weight: 400 !important;
+  color: #a1a1aa !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+}
+
+#skills .flex.flex-wrap,
+#skills .flex-wrap,
+.stack-items {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px 9px !important;
+  align-items: center !important;
+}
+
+#skills .inline-flex,
+.stack-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 5.5px 10.5px !important;
+  border-radius: 6.5px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: #d4d4d8 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.81rem !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease !important;
+  cursor: default;
+}
+
+#skills .inline-flex:hover,
+.stack-tag:hover {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+#skills .inline-flex img,
+#skills .inline-flex svg,
+.stack-tag-icon {
+  width: 14px !important;
+  height: 14px !important;
+  max-width: 14px !important;
+  max-height: 14px !important;
+  flex-shrink: 0 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  filter: brightness(0) invert(0.85);
+  opacity: 0.9;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+#skills .inline-flex svg,
+.stack-tag svg {
+  filter: none !important;
+  color: #d4d4d8 !important;
+}
+
+#skills .inline-flex:hover img,
+.stack-tag:hover img {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+#skills .inline-flex:hover svg,
+.stack-tag:hover svg {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+#skills .type-numeral {
+  display: none !important;
+}
+
+@media (max-width: 680px) {
+  #skills .grid,
+  .stack-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 16px 0 !important;
+  }
+
+  #skills .grid > div:first-child,
+  .stack-category {
+    width: 100% !important;
+    padding-top: 0 !important;
+  }
+}
+
 .show-all-blogs-link .arrow {
   transition: transform 0.2s ease;
 }
