@@ -2,7 +2,7 @@
 
 import { stagger, useAnimate } from "motion/react";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 const entranceTargets = [
   ".site-nav > a",
@@ -27,14 +27,29 @@ export function PageEntrance({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [scope, animate] = useAnimate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = scope.current;
     if (!root) return;
+
+    // Client-side navigation swaps in the new route before effects run. A layout
+    // effect applies the hidden starting state before that new route is painted.
+    document.documentElement.classList.add("page-loading");
 
     const targets = Array.from(
       root.querySelectorAll(entranceTargets) as NodeListOf<HTMLElement>,
     );
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (targets.length) {
+      // Set the starting state while the pre-paint loading class still hides the page.
+      animate(
+        targets,
+        reducedMotion ? { opacity: 0 } : { opacity: 0, y: 26 },
+        { duration: 0 },
+      );
+    }
+
+    document.documentElement.classList.remove("page-loading");
+
     if (targets.length) {
       animate(
         targets,
@@ -47,6 +62,28 @@ export function PageEntrance({ children }: { children: React.ReactNode }) {
       );
     }
   }, [animate, pathname, scope]);
+
+  useEffect(() => {
+    const root = scope.current;
+    if (!root) return;
+
+    const handleNavigationStart = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const link = target.closest("a");
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+
+      const destination = new URL(link.href, window.location.href);
+      if (destination.origin === window.location.origin && destination.pathname !== window.location.pathname) {
+        document.documentElement.classList.add("page-loading");
+      }
+    };
+
+    root.addEventListener("click", handleNavigationStart, true);
+    return () => root.removeEventListener("click", handleNavigationStart, true);
+  }, [scope]);
 
   return <div ref={scope} className="page-entrance-scope">{children}</div>;
 }
