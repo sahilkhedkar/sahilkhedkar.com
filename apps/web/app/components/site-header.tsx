@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav } from "../lib/profile";
-import { ViewCounter } from "./view-counter";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -58,7 +57,6 @@ export function SiteHeader() {
               )}
             </label>
           )}
-          <ViewCounter />
         </div>
       </div>
     </header>
