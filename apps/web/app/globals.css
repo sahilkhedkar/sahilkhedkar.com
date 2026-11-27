@@ -40,6 +40,11 @@
   color-scheme: dark;
 }
 
+/* Keep the server-rendered markup from flashing before the entrance animation starts. */
+html.page-loading .page-entrance-scope {
+  visibility: hidden;
+}
+
 html,
 body {
   width: 100%;
@@ -290,56 +295,6 @@ a:focus-visible {
   border-width: 5px 5px 0;
   border-style: solid;
   border-color: var(--tip-bg) transparent transparent;
-}
-
-.view-counter {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 32px;
-  padding-inline: 8px;
-  border-radius: 8px;
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 500;
-  line-height: 1;
-  user-select: none;
-  transition: color 0.15s ease;
-}
-
-.view-counter:hover,
-.view-counter:focus-visible {
-  color: var(--fg);
-}
-
-.view-counter:focus-visible {
-  outline: 2px solid var(--fg);
-  outline-offset: 2px;
-}
-
-.view-counter .social-tip {
-  top: calc(100% + 8px);
-  bottom: auto;
-  transform: translate(-50%, -4px);
-}
-
-.view-counter .social-tip::after {
-  top: auto;
-  bottom: 100%;
-  border-width: 0 5px 5px;
-  border-color: transparent transparent var(--tip-bg);
-}
-
-.view-counter:hover .social-tip,
-.view-counter:focus-visible .social-tip {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.view-counter-count {
-  font-variant-numeric: tabular-nums;
 }
 
 .social-inline:hover .social-tip,
@@ -2503,7 +2458,7 @@ a.role-company:hover .role-arrow {
 }
 
 .experience-section-heading {
-  font-size: 1.25rem !important;
+  font-size: 1.5rem !important;
   font-weight: 700 !important;
   text-transform: none !important;
   letter-spacing: -0.02em;
@@ -2681,7 +2636,7 @@ a.role-company:hover .role-arrow {
 }
 
 .home-blogs-heading {
-  font-size: 1.25rem !important;
+  font-size: 1.5rem !important;
   font-weight: 700 !important;
   text-transform: none !important;
   letter-spacing: -0.02em;
@@ -2889,7 +2844,7 @@ a.role-company:hover .role-arrow {
 #skills-heading,
 .stack-heading {
   font-family: inherit !important;
-  font-size: 1.25rem !important;
+  font-size: 1.5rem !important;
   font-weight: 700 !important;
   text-transform: none !important;
   letter-spacing: -0.02em !important;
