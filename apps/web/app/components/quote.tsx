@@ -9,14 +9,14 @@ export function Quote() {
       </svg>
       <blockquote>
         <p>
-          “Kill them with your success
+          “If you want to shine like a sun,
           <br />
-          bury them with your smile.”
+          first burn like a sun.”
         </p>
       </blockquote>
       <figcaption>
         <span className="quote-rule" />
-        <span>C.Joseph Vijay</span>
+        <span>Dr. APJ Abdul Kalam</span>
         <span className="quote-rule" />
       </figcaption>
     </figure>
